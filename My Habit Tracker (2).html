@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Habit Tracker</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#ffffff;--card:#ffffff;--tx:#1f3150;--mu:#7d8798;--ln:#ddd8ce;--ac:#e88fae;--ac2:#8fb4e3;--ok:#b5dc9f;--okbg:#e6f3dc;--w0:#fadcea;--w1:#dcebf8;--w2:#e3f2d9;--w3:#fdf3c8;--w4:#e6dcf2}
+ :root[data-theme="dark"]{--bg:#171a24;--card:#20242f;--tx:#e9edf6;--mu:#9aa3b5;--ln:#343a4a;--okbg:#27432f;--ok:#7fb86a;--w0:#6a4658;--w1:#3f5671;--w2:#46603d;--w3:#6d6130;--w4:#574a73}
+:root[data-theme="dark"] td.n,:root[data-theme="dark"] td.dn{background:color-mix(in srgb,var(--rd) 30%,var(--card))}
+.r0{--rc:#dcebf8;--rd:#a9cdee}.r1{--rc:#e3f2d9;--rd:#b5dc9f}.r2{--rc:#e6dcf2;--rd:#c7b0e3}.r3{--rc:#fdf3c8;--rd:#f6d97a}.r4{--rc:#fde0c4;--rd:#f6bb85}.r5{--rc:#dde0f5;--rd:#b2b8ea}.r6{--rc:#e1f1d6;--rd:#b8dd9a}.r7{--rc:#fadcea;--rd:#f2a9c8}.r8{--rc:#fdf0c0;--rd:#f4d56f}.r9{--rc:#fbd5cb;--rd:#f1a898}.r10{--rc:#d6eddf;--rd:#9fd6bb}.r11{--rc:#fbdbe6;--rd:#f2a6bf}.r12{--rc:#d9e9f7;--rd:#a4cbea}.r13{--rc:#e3f1d4;--rd:#b9d996}.r14{--rc:#e5d9f2;--rd:#c4a8e0}.r15{--rc:#d3ede4;--rd:#9ad3c2}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;padding:16px;max-width:1100px;margin:0 auto}
+h1{font-size:22px;margin:0}h2{font-size:14px;margin:0 0 10px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.nav{display:flex;align-items:center;gap:6px}
+button{font:inherit;cursor:pointer;border:1px solid var(--ln);background:var(--card);color:var(--tx);border-radius:10px;padding:6px 12px}
+button.p{background:var(--ac);border-color:var(--ac);color:#fff}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:16px;padding:14px;margin-bottom:14px}
+body>.card:nth-child(5){background:#fff8e6;border-color:#f1e0a8}
+body>.card:nth-child(6){background:#f8f1fa;border-color:#d9c9ec}
+body>.card:nth-child(7){background:#eef5ea;border-color:#c6dcbb}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px}
+.row .card{margin:0;text-align:center}
+.row .card:nth-child(1){background:#e4eff9;border-color:#c5dcf0}.row .card:nth-child(2){background:#e6f3dc;border-color:#c8e0b8}.row .card:nth-child(3){background:#fdeedd;border-color:#f4d2ae}.row .card:nth-child(4){background:#ece2f6;border-color:#d3c2ea}
+.ring{width:96px;height:96px;border-radius:50%;margin:4px auto;display:grid;place-items:center}
+.ring b{background:#ffffff;color:#1f3150;width:72px;height:72px;border-radius:50%;display:grid;place-items:center;font-size:18px}
+.big{font-size:26px;font-weight:700}.mu{color:var(--mu);font-size:12px}
+.row .card .mu{color:#6c7788}
+.row .card,body>.card:nth-child(5),body>.card:nth-child(6),body>.card:nth-child(7){color:#1f3150}
+body>.card:nth-child(5) h2,body>.card:nth-child(6) h2,body>.card:nth-child(7) h2,.lab{color:#6c7788}
+.today{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.t{display:flex;align-items:center;gap:10px;text-align:left;padding:10px 12px;border-radius:12px}
+.t i{width:22px;height:22px;border:2px solid var(--ln);border-radius:7px;display:grid;place-items:center;font-style:normal;color:#1f3150;flex:none}
+.t.d{background:var(--okbg);border-color:var(--ok)}.t.d i{background:var(--ok);border-color:var(--ok)}
+.sc{overflow-x:auto}
+table{border-collapse:separate;border-spacing:0;font-size:12px}
+th,td{padding:0;text-align:center}
+th{color:var(--mu);font-weight:600;min-width:26px;height:34px;line-height:1.1;border-bottom:1px solid var(--ln)}
+th.n,td.n{position:sticky;left:0;background:var(--card);text-align:left;padding:0 10px 0 8px;min-width:130px;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;z-index:1}
+td.n{background:var(--rc,var(--card));color:#1f3150}
+td.dn{background:var(--rc,var(--card));color:#1f3150;min-width:44px}
+td.c{height:34px;border-bottom:1px solid var(--ln);border-right:1px solid var(--ln)}
+td.n,td.dn{border-bottom:1px solid var(--card)}
+.b{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--ln);background:transparent;padding:0;color:#1f3150;font-size:12px;line-height:1}
+.b.d{border-color:transparent;background:var(--rd,var(--ok))}
+.tc{background:rgba(232,143,174,.13)}
+th.tc{color:var(--ac)}
+.bars{display:flex;align-items:flex-end;gap:3px;height:110px}
+.bars div{flex:1;background:#a9cdee;border-radius:4px 4px 0 0;min-height:2px}
+.bars div.x{background:var(--ac)}
+.lab{display:flex;gap:3px;font-size:9px;color:var(--mu)}.lab span{flex:1;text-align:center}
+.hp{display:grid;grid-template-columns:140px 1fr 44px;gap:8px;align-items:center;margin:6px 0;font-size:13px}
+.pb{height:10px;background:rgba(150,170,140,.25);border-radius:6px;overflow:hidden}.pb i{display:block;height:100%;background:linear-gradient(90deg,#b5dc9f,#9fd6bb)}
+.wk{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;text-align:center}
+.wk div{border-radius:12px;padding:8px 2px;color:#1f3150}
+.wk div:nth-child(1){background:var(--w0)}.wk div:nth-child(2){background:var(--w1)}.wk div:nth-child(3){background:var(--w2)}.wk div:nth-child(4){background:var(--w3)}.wk div:nth-child(5){background:var(--w4)}
+.wk .mu{color:inherit;opacity:.7}
+input,textarea{font:inherit;background:var(--bg);color:var(--tx);border:1px solid var(--ln);border-radius:8px;padding:6px 8px}
+.mg{display:flex;gap:6px;margin:5px 0}.mg input{flex:1}
+textarea{width:100%;height:80px;font-size:11px}
+.hide{display:none}
+@media(max-width:560px){.hp{grid-template-columns:100px 1fr 40px}}
+
+#exToday{background:#e4eff9;border-color:#c5dcf0;color:#1f3150}
+#exPlan{background:#fdf1e6;border-color:#f4d2ae;color:#1f3150}
+#exToday h2,#exPlan h2,#exPlan .mu,#exToday .mu{color:#6c7788}
+.xg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.xd{background:#fffdfa;border:1px solid #f1d9bd;border-radius:14px;padding:10px}
+.xd.xt{border-color:var(--ac);box-shadow:0 0 0 2px rgba(232,143,174,.25)}
+.xh{display:flex;justify-content:space-between;margin-bottom:6px}
+.xi{display:flex;gap:4px;margin:4px 0}
+.xb{flex:1;text-align:left;font-size:12px;padding:5px 8px;border-radius:8px;background:#fff;color:#1f3150}
+.xb.d{background:#e6f3dc;border-color:#b5dc9f;text-decoration:line-through}
+.xx{padding:3px 8px;border-radius:8px;color:#8a8f9c;background:#fff}
+.xd .mg input{width:100%;min-width:0;font-size:12px;padding:4px 6px;background:#fff;color:#1f3150}
+.xd .mg button{padding:3px 9px;background:#fff;color:#1f3150}
+</style></head><body>
+<div class="top">
+  <div><h1 id="hi"></h1><div class="mu" id="dt"></div></div>
+  <div class="nav"><button id="pv">‹</button><b id="mn" style="min-width:130px;text-align:center"></b><button id="nx">›</button><button id="td">Today</button></div>
+</div>
+<div class="row" id="stats"></div>
+<div class="card" id="todayCard"><h2>Aaj ke kaam</h2><div class="today" id="today"></div></div>
+<div class="card"><h2>Monthly grid</h2><div class="sc"><table id="grid"></table></div></div>
+<div class="card"><h2>Weekly progress</h2><div class="wk" id="wk"></div></div>
+<div class="card"><h2>Daily completion</h2><div class="bars" id="bars"></div><div class="lab" id="lab"></div></div>
+<div class="card"><h2>Habit-wise progress</h2><div id="hp"></div></div>
+<div class="card" id="exToday"></div>
+<div class="card" id="exPlan"></div>
+<div class="card"><h2>Settings</h2>
+  <div class="mg"><input id="nm" placeholder="Aapka naam"><button id="theme">Light / Dark</button></div>
+  <div id="mgr"></div>
+  <div class="mg"><input id="add" placeholder="Nayi habit likho..."><button class="p" id="addb">Add</button></div>
+  <div style="margin-top:10px"><button id="exp">Backup copy karo</button> <button id="imp">Backup restore karo</button></div>
+  <textarea id="bk" class="hide" placeholder="Backup text yahan aayega / paste karo"></textarea>
+  <div class="mu" style="margin-top:8px">Data sirf is browser/device me save hota hai. Dusre device pe use karna ho to Backup copy karke wahan restore karo.</div>
+</div>
+<script>
+const KEY='habitApp.v1',pad=n=>String(n).padStart(2,'0'),uid=()=>Math.random().toString(36).slice(2,9);
+const dk=(y,m,d)=>y+'-'+pad(m+1)+'-'+pad(d),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const MN=['January','February','March','April','May','June','July','August','September','October','November','December'];
+let S=null;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!S||!S.habits)S={name:'',theme:'',checks:{},habits:['Wake up early','Exercise 30 min','Read 10 pages','Study / Coding 2 hrs','Drink 8 glasses of water','Meditate 10 min','Plan next day','Sleep before 11 PM'].map(n=>({id:uid(),name:n}))};
+if(!S.plan||S.plan.length!=7)S.plan=[['Push-ups','Dumbbell press'],['Pull-ups','Rows'],['Squats','Lunges'],['Shoulder press','Plank'],['Running 30 min'],['Yoga / Stretching'],[]].map(a=>a.map(n=>({id:uid(),name:n})));
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const now=new Date();let Y=now.getFullYear(),M=now.getMonth();
+const $=id=>document.getElementById(id);
+const dim=()=>new Date(Y,M+1,0).getDate();
+const isOn=(h,d)=>!!S.checks[h.id+'|'+dk(Y,M,d)];
+const isCur=()=>now.getFullYear()==Y&&now.getMonth()==M;
+const T=()=>isCur()?now.getDate():0;
+function streak(h){let d=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  if(!S.checks[h.id+'|'+dk(d.getFullYear(),d.getMonth(),d.getDate())])d.setDate(d.getDate()-1);
+  let n=0;while(S.checks[h.id+'|'+dk(d.getFullYear(),d.getMonth(),d.getDate())]){n++;d.setDate(d.getDate()-1)}return n}
+function render(){
+  if(S.theme)document.documentElement.dataset.theme=S.theme;
+  const H=S.habits,N=dim(),hr=now.getHours();
+  $('hi').textContent=(hr<12?'Good morning':hr<17?'Good afternoon':'Good evening')+(S.name?', '+S.name:'')+' 👋';
+  $('dt').textContent=now.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  $('mn').textContent=MN[M]+' '+Y;
+  const dayCnt=[];let tot=0;
+  for(let d=1;d<=N;d++){let c=0;H.forEach(h=>{if(isOn(h,d))c++});dayCnt.push(c);tot+=c}
+  const possible=H.length*N,pct=possible?tot/possible:0;
+  const tn=T(),todayDone=tn?dayCnt[tn-1]:0,best=Math.max(0,...H.map(streak));
+  $('stats').innerHTML=
+   `<div class="card"><div class="mu">Month progress</div><div class="ring" style="background:conic-gradient(var(--ac),var(--ac2) ${pct*360}deg,rgba(150,160,180,.25) 0)"><b>${(pct*100).toFixed(0)}%</b></div><div class="mu">${tot} / ${possible} checks</div></div>
+    <div class="card"><div class="mu">Aaj</div><div class="big">${tn?todayDone+' / '+H.length:'–'}</div><div class="mu">habits complete</div></div>
+    <div class="card"><div class="mu">Best streak 🔥</div><div class="big">${best}</div><div class="mu">din lagatar</div></div>
+    <div class="card"><div class="mu">Habits</div><div class="big">${H.length}</div><div class="mu">track ho rahi hain</div></div>`;
+  $('todayCard').classList.toggle('hide',!tn);
+  $('today').innerHTML=H.map(h=>`<button class="t ${isOn(h,tn)?'d':''}" data-h="${h.id}" data-d="${tn}"><i>${isOn(h,tn)?'✔':''}</i>${esc(h.name)}</button>`).join('')||'<span class="mu">Settings me habits add karo.</span>';
+  let g='<tr><th class="n">Habit</th>';
+  for(let d=1;d<=31;d++){if(d>N)break;const w=new Date(Y,M,d).toLocaleDateString('en',{weekday:'narrow'});g+=`<th class="${d==tn?'tc':''}">${w}<br>${d}</th>`}
+  g+='<th>Done</th></tr>';
+  H.forEach((h,i)=>{let c=0;g+=`<tr class="r${i%16}"><td class="n" title="${esc(h.name)}">${esc(h.name)}</td>`;
+    for(let d=1;d<=N;d++){const o=isOn(h,d);if(o)c++;g+=`<td class="c ${d==tn?'tc':''}"><button class="b ${o?'d w'+Math.floor((d-1)/7):''}" data-h="${h.id}" data-d="${d}">${o?'✔':''}</button></td>`}
+    g+=`<td class="dn"><b>${c}</b></td></tr>`});
+  $('grid').innerHTML=g;
+  let w='';for(let k=0;k<5;k++){const a=7*k+1,e=Math.min(7*k+7,N);if(a>N){w+='<div><div class="mu">Week '+(k+1)+'</div><b>–</b></div>';continue}
+    let s=0;for(let d=a;d<=e;d++)s+=dayCnt[d-1];const p=H.length?s/(H.length*(e-a+1)):0;
+    w+=`<div><div class="mu">Week ${k+1}</div><b style="font-size:18px">${(p*100).toFixed(0)}%</b></div>`}
+  $('wk').innerHTML=w;
+  $('bars').innerHTML=dayCnt.map((c,i)=>`<div class="${i+1==tn?'x':''}" title="Day ${i+1}: ${c}" style="height:${H.length?Math.max(2,c/H.length*100):2}%"></div>`).join('');
+  $('lab').innerHTML=dayCnt.map((c,i)=>`<span>${i+1}</span>`).join('');
+  $('hp').innerHTML=H.map(h=>{let c=0;for(let d=1;d<=N;d++)if(isOn(h,d))c++;const p=c/N;
+    return `<div class="hp"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(h.name)}</span><div class="pb"><i style="width:${p*100}%"></i></div><b>${(p*100).toFixed(0)}%</b></div>`}).join('');
+  if(document.activeElement.tagName!='INPUT'){
+   $('mgr').innerHTML=H.map(h=>`<div class="mg"><input data-r="${h.id}" value="${esc(h.name)}"><button data-x="${h.id}">Delete</button></div>`).join('');$('nm').value=S.name||''}
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.h){const k=b.dataset.h+'|'+dk(Y,M,+b.dataset.d);if(S.checks[k])delete S.checks[k];else S.checks[k]=1;save();render()}
+  else if(b.dataset.x){if(b.dataset.s){S.habits=S.habits.filter(h=>h.id!=b.dataset.x);save();render()}else{b.dataset.s=1;b.textContent='Pakka?'}}
+});
+$('pv').onclick=()=>{M--;if(M<0){M=11;Y--}render()};
+$('nx').onclick=()=>{M++;if(M>11){M=0;Y++}render()};
+$('td').onclick=()=>{Y=now.getFullYear();M=now.getMonth();render()};
+$('nm').onchange=e=>{S.name=e.target.value.trim();save();render()};
+$('mgr').addEventListener('change',e=>{const h=S.habits.find(x=>x.id==e.target.dataset.r);if(h&&e.target.value.trim()){h.name=e.target.value.trim();save();render()}});
+const addH=()=>{const v=$('add').value.trim();if(!v)return;S.habits.push({id:uid(),name:v});$('add').value='';save();render()};
+$('addb').onclick=addH;$('add').onkeydown=e=>{if(e.key=='Enter')addH()};
+$('theme').onclick=()=>{const dark=document.documentElement.dataset.theme=='dark';S.theme=dark?'light':'dark';save();render()};
+$('exp').onclick=()=>{const t=$('bk');t.classList.remove('hide');t.value=JSON.stringify(S);t.select();try{document.execCommand('copy')}catch(e){}};
+$('imp').onclick=()=>{const t=$('bk');if(t.classList.contains('hide')||!t.value.trim()){t.classList.remove('hide');t.value='';t.placeholder='Backup text yahan paste karo, phir dobara "Backup restore karo" dabao';return}
+  try{const d=JSON.parse(t.value);if(d.habits&&d.checks){S=d;save();t.value='';t.classList.add('hide');render()}}catch(e){t.value='';t.placeholder='Ye valid backup nahi hai'}};
+const DN=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+function renderEx(){
+ const ti=(now.getDay()+6)%7,mon=new Date(now.getFullYear(),now.getMonth(),now.getDate()-ti);
+ const dateOf=i=>{const d=new Date(mon.getFullYear(),mon.getMonth(),mon.getDate()+i);return dk(d.getFullYear(),d.getMonth(),d.getDate())};
+ const done=(e,i)=>!!S.checks[e.id+'|'+dateOf(i)];
+ const tl=S.plan[ti],dn=tl.filter(e=>done(e,ti)).length;
+ $('exToday').innerHTML=`<h2>Aaj ka exercise · ${DN[ti]}</h2>`+(tl.length?`<div class="mu" style="margin-bottom:8px">${dn} / ${tl.length} complete</div><div class="today">`+tl.map(e=>`<button class="t ${done(e,ti)?'d':''}" data-ek="${e.id}|${dateOf(ti)}"><i>${done(e,ti)?'✔':''}</i>${esc(e.name)}</button>`).join('')+'</div>':'<div class="mu">Aaj rest day 🌿 Koi exercise plan nahi hai. Neeche plan me add kar sakte ho.</div>');
+ $('exPlan').innerHTML='<h2>Weekly exercise plan</h2><div class="xg">'+DN.map((n,i)=>{const Ls=S.plan[i],dc=Ls.filter(e=>done(e,i)).length;
+  return `<div class="xd ${i==ti?'xt':''}"><div class="xh"><b>${n.slice(0,3)}</b><span class="mu">${Ls.length?dc+'/'+Ls.length:'rest'}</span></div>`+Ls.map(e=>`<div class="xi"><button class="xb ${done(e,i)?'d':''}" data-ek="${e.id}|${dateOf(i)}">${esc(e.name)}</button><button class="xx" data-xd="${i}|${e.id}">×</button></div>`).join('')+`<div class="mg"><input data-xa="${i}" placeholder="+ add"><button data-xaddb="${i}">+</button></div></div>`}).join('')+'</div><div class="mu" style="margin-top:8px">Is hafte ki dates ke hisaab se tick lagta hai. Exercise ke naam par tap karke done mark karo. × se hatao (2 baar tap).</div>';
+}
+function addEx(i,v){v=v.trim();if(!v)return;S.plan[i].push({id:uid(),name:v});save();render()}
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.ek){const k=b.dataset.ek;if(S.checks[k])delete S.checks[k];else S.checks[k]=1;save();render()}
+ else if(b.dataset.xd){const [i,id]=b.dataset.xd.split('|');if(b.dataset.s){S.plan[i]=S.plan[i].filter(x=>x.id!=id);save();render()}else{b.dataset.s=1;b.textContent='?'}}
+ else if(b.dataset.xaddb){const inp=document.querySelector('[data-xa="'+b.dataset.xaddb+'"]');addEx(+b.dataset.xaddb,inp.value)}
+});
+document.addEventListener('keydown',e=>{if(e.key=='Enter'&&e.target.dataset&&e.target.dataset.xa!==undefined)addEx(+e.target.dataset.xa,e.target.value)});
+const render0=render;render=function(){render0();renderEx()};
+render();
+</script></body></html>
