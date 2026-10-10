@@ -79,7 +79,7 @@ textarea{width:100%;height:80px;font-size:11px}
   <div class="nav"><button id="pv">‹</button><b id="mn" style="min-width:130px;text-align:center"></b><button id="nx">›</button><button id="td">Today</button></div>
 </div>
 <div class="row" id="stats"></div>
-<div class="card" id="todayCard"><h2>Aaj ke kaam</h2><div class="today" id="today"></div></div>
+<div class="card" id="todayCard"><h2>Today's work</h2><div class="today" id="today"></div></div>
 <div class="card"><h2>Monthly grid</h2><div class="sc"><table id="grid"></table></div></div>
 <div class="card"><h2>Weekly progress</h2><div class="wk" id="wk"></div></div>
 <div class="card"><h2>Daily completion</h2><div class="bars" id="bars"></div><div class="lab" id="lab"></div></div>
@@ -87,12 +87,12 @@ textarea{width:100%;height:80px;font-size:11px}
 <div class="card" id="exToday"></div>
 <div class="card" id="exPlan"></div>
 <div class="card"><h2>Settings</h2>
-  <div class="mg"><input id="nm" placeholder="Aapka naam"><button id="theme">Light / Dark</button></div>
+  <div class="mg"><input id="nm" placeholder="Your name"><button id="theme">Light / Dark</button></div>
   <div id="mgr"></div>
-  <div class="mg"><input id="add" placeholder="Nayi habit likho..."><button class="p" id="addb">Add</button></div>
-  <div style="margin-top:10px"><button id="exp">Backup copy karo</button> <button id="imp">Backup restore karo</button></div>
-  <textarea id="bk" class="hide" placeholder="Backup text yahan aayega / paste karo"></textarea>
-  <div class="mu" style="margin-top:8px">Data sirf is browser/device me save hota hai. Dusre device pe use karna ho to Backup copy karke wahan restore karo.</div>
+  <div class="mg"><input id="add" placeholder="write new habit..."><button class="p" id="addb">Add</button></div>
+  <div style="margin-top:10px"><button id="exp">Backup copy </button> <button id="imp">Backup restore </button></div>
+  <textarea id="bk" class="hide" placeholder="Backup text  / paste karo"></textarea>
+  <div class="mu" style="margin-top:8px"></div>
 </div>
 <script>
 const KEY='habitApp.v1',pad=n=>String(n).padStart(2,'0'),uid=()=>Math.random().toString(36).slice(2,9);
@@ -123,9 +123,9 @@ function render(){
   const tn=T(),todayDone=tn?dayCnt[tn-1]:0,best=Math.max(0,...H.map(streak));
   $('stats').innerHTML=
    `<div class="card"><div class="mu">Month progress</div><div class="ring" style="background:conic-gradient(var(--ac),var(--ac2) ${pct*360}deg,rgba(150,160,180,.25) 0)"><b>${(pct*100).toFixed(0)}%</b></div><div class="mu">${tot} / ${possible} checks</div></div>
-    <div class="card"><div class="mu">Aaj</div><div class="big">${tn?todayDone+' / '+H.length:'–'}</div><div class="mu">habits complete</div></div>
-    <div class="card"><div class="mu">Best streak 🔥</div><div class="big">${best}</div><div class="mu">din lagatar</div></div>
-    <div class="card"><div class="mu">Habits</div><div class="big">${H.length}</div><div class="mu">track ho rahi hain</div></div>`;
+    <div class="card"><div class="mu">Today</div><div class="big">${tn?todayDone+' / '+H.length:'–'}</div><div class="mu">habits complete</div></div>
+    <div class="card"><div class="mu">Best streak 🔥</div><div class="big">${best}</div><div class="mu">Days continue</div></div>
+    <div class="card"><div class="mu">Habits</div><div class="big">${H.length}</div><div class="mu">tracking </div></div>`;
   $('todayCard').classList.toggle('hide',!tn);
   $('today').innerHTML=H.map(h=>`<button class="t ${isOn(h,tn)?'d':''}" data-h="${h.id}" data-d="${tn}"><i>${isOn(h,tn)?'✔':''}</i>${esc(h.name)}</button>`).join('')||'<span class="mu">Settings me habits add karo.</span>';
   let g='<tr><th class="n">Habit</th>';
@@ -168,9 +168,9 @@ function renderEx(){
  const dateOf=i=>{const d=new Date(mon.getFullYear(),mon.getMonth(),mon.getDate()+i);return dk(d.getFullYear(),d.getMonth(),d.getDate())};
  const done=(e,i)=>!!S.checks[e.id+'|'+dateOf(i)];
  const tl=S.plan[ti],dn=tl.filter(e=>done(e,ti)).length;
- $('exToday').innerHTML=`<h2>Aaj ka exercise · ${DN[ti]}</h2>`+(tl.length?`<div class="mu" style="margin-bottom:8px">${dn} / ${tl.length} complete</div><div class="today">`+tl.map(e=>`<button class="t ${done(e,ti)?'d':''}" data-ek="${e.id}|${dateOf(ti)}"><i>${done(e,ti)?'✔':''}</i>${esc(e.name)}</button>`).join('')+'</div>':'<div class="mu">Aaj rest day 🌿 Koi exercise plan nahi hai. Neeche plan me add kar sakte ho.</div>');
+ $('exToday').innerHTML=`<h2>Todays exercise · ${DN[ti]}</h2>`+(tl.length?`<div class="mu" style="margin-bottom:8px">${dn} / ${tl.length} complete</div><div class="today">`+tl.map(e=>`<button class="t ${done(e,ti)?'d':''}" data-ek="${e.id}|${dateOf(ti)}"><i>${done(e,ti)?'✔':''}</i>${esc(e.name)}</button>`).join('')+'</div>':'<div class="mu">Today is rest day 🌿 there are no exercise today</div>');
  $('exPlan').innerHTML='<h2>Weekly exercise plan</h2><div class="xg">'+DN.map((n,i)=>{const Ls=S.plan[i],dc=Ls.filter(e=>done(e,i)).length;
-  return `<div class="xd ${i==ti?'xt':''}"><div class="xh"><b>${n.slice(0,3)}</b><span class="mu">${Ls.length?dc+'/'+Ls.length:'rest'}</span></div>`+Ls.map(e=>`<div class="xi"><button class="xb ${done(e,i)?'d':''}" data-ek="${e.id}|${dateOf(i)}">${esc(e.name)}</button><button class="xx" data-xd="${i}|${e.id}">×</button></div>`).join('')+`<div class="mg"><input data-xa="${i}" placeholder="+ add"><button data-xaddb="${i}">+</button></div></div>`}).join('')+'</div><div class="mu" style="margin-top:8px">Is hafte ki dates ke hisaab se tick lagta hai. Exercise ke naam par tap karke done mark karo. × se hatao (2 baar tap).</div>';
+  return `<div class="xd ${i==ti?'xt':''}"><div class="xh"><b>${n.slice(0,3)}</b><span class="mu">${Ls.length?dc+'/'+Ls.length:'rest'}</span></div>`+Ls.map(e=>`<div class="xi"><button class="xb ${done(e,i)?'d':''}" data-ek="${e.id}|${dateOf(i)}">${esc(e.name)}</button><button class="xx" data-xd="${i}|${e.id}">×</button></div>`).join('')+`<div class="mg"><input data-xa="${i}" placeholder="+ add"><button data-xaddb="${i}">+</button></div></div>`}).join('')+'</div><div class="mu" </div>';
 }
 function addEx(i,v){v=v.trim();if(!v)return;S.plan[i].push({id:uid(),name:v});save();render()}
 document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
